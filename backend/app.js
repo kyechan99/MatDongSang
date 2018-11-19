@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/v', video);
 app.use('/d', develop);
-app.use('/user', users);
+app.use('/user', user);
 app.use('/api/movies', movies);
 app.use(require('connect-history-api-fallback')())
 
