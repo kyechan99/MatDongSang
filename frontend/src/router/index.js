@@ -2,9 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
+Vue.component('vue-multiselect', window.VueMultiselect.default)
 
 import Index from 'components/IndexPage'
-import Show from 'components/ShowPage'
+// import Show from 'components/ShowPage'
+import Dev from 'components/DevelopPage'
+
 export default new Router({
   mode: 'history',
   routes: [
@@ -14,9 +17,9 @@ export default new Router({
       component: Index
     },
     {
-      path: '/:id',
-      name: 'show',
-      component: Show
+      path: '/d',
+      name: 'dev',
+      component: Dev
     }
   ]
 })
