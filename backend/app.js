@@ -6,8 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 // MongoDB
-// var mongoClient = require('mongodb').MongoClient
-// global.database = null
+var mongoClient = require('mongodb').MongoClient
+global.database = null
 
 var index = require('./routes/index');
 var user = require('./routes/user');
@@ -29,9 +29,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-// app.use('/v', video);
-// app.use('/d', develop);
-// app.use('/user', users);
+app.use('/v', video);
+app.use('/d', develop);
+app.use('/user', users);
 app.use('/api/movies', movies);
 app.use(require('connect-history-api-fallback')())
 
@@ -53,17 +53,17 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-// function connectDB() {
-//   mongoClient.connect(config.db_url, { useNewUrlParser:true }, function(err, database) {
-//       if (err) throw err;
-//       console.log('Database Connected : ' + config.db_url);
-//       global.database = database.db('matdongsang');
-//   })
-// };
+function connectDB() {
+  mongoClient.connect(config.db_url, { useNewUrlParser:true }, function(err, database) {
+      if (err) throw err;
+      console.log('Database Connected : ' + config.db_url);
+      global.database = database.db('matdongsang');
+  })
+};
 
-// app.listen(process.env.PORT || config.server_port, function() {
-//   console.log("Connected 8080 port");
-//   connectDB();
-// });
+app.listen(process.env.PORT || config.server_port, function() {
+  console.log("Connected 8080 port");
+  connectDB();
+});
 
 module.exports = app;
