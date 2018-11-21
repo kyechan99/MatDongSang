@@ -1,14 +1,20 @@
 <template>
-  <div class="movies">
+  <div class="dev">
     <!-- navbar -->
     <nav class="navbar-default navbar-fixed-top">
       <div class="title fixed-top">
         <p class="text-center">개발자 사이트</p>
         <div class="container">
           <div class="row">
-            <div class="col-md-4">동영상 등록</div>
-            <div class="col-md-4">프랜차이즈 등록</div>
-            <div class="col-md-4">음식 등록</div>
+            <div class="col-md-4">
+              <a v-on:click="menu = 0">동영상 등록</a>
+            </div>
+            <div class="col-md-4">
+              <a v-on:click="menu = 1">프랜차이즈 등록</a>
+            </div>
+            <div class="col-md-4">
+              <a v-on:click="menu = 2">음식 등록</a>
+            </div>
           </div>
         </div>
       </div>
@@ -16,7 +22,8 @@
     
     <!-- body -->
     <div class="container">
-      <div class="card">
+      <!-- 동영상 등록 -->
+      <div class="card" v-if="menu==0">
         <h1>동영상 등록</h1>
         <hr>
         <br>
@@ -29,21 +36,53 @@
           <!-- 2 -->
           <div class="form-group">
             <h4>2. 프랜차이즈</h4>
-            <multiselect v-model="franchiseValue" tag-placeholder="Add this as new tag" placeholder="Search or add a tag" label="name" track-by="code" :options="franchiseOptions" :multiple="true" :taggable="true" @tag="addTag"></multiselect>
+            <multiselect v-model="franchiseValue" tag-placeholder="Add this as new tag" placeholder="관련된 프랜차이즈 태그를 골라주세요." label="name" track-by="code" :options="franchiseOptions" :multiple="true" :taggable="true" @tag="addFranchiseTag"></multiselect>
             <!-- <pre class="language-json"><code>{{ franchiseValue  }}</code></pre> -->
           </div>
           <!-- 2 -->
           <div class="form-group">
             <h4>3. 음식</h4>
-            <multiselect v-model="foodValue" tag-placeholder="Add this as new tag" placeholder="Search or add a tag" label="name" track-by="code" :options="foodOptions" :multiple="true" :taggable="true" @tag="addTag"></multiselect>
+            <multiselect v-model="foodValue" tag-placeholder="Add this as new tag" placeholder="관련된 음식 태그를 골라주세요." label="name" track-by="code" :options="foodOptions" :multiple="true" :taggable="true" @tag="addFoodTag"></multiselect>
             <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
           </div>
         </form>
+        <button class="btn btn-primary float-right" type="submit">
+          <i class="fas fa-check"> 저장</i>
+        </button>
+      </div>
 
+      <!-- 프랜차이즈 등록 -->
+      <div class="card" v-else-if="menu==1">
+        <h1>프랜차이즈 등록</h1>
+        <p class="desc"> 이미 등록된 프랜차이즈는 아닌지 확인후 등록해주세요.</p>
+        <hr>
         <br>
-        <br>
-        <br>
+        <form action="" method="post">
+          <!-- 1 -->
+          <div class="form-group">
+            <h4>1. 프랜차이즈 이름</h4>
+            <input class="form-control" type="text" name="" id="" placeholder="ex) 비에이치씨(BHC)">
+            
+          </div>
+        </form>
+        <button class="btn btn-primary float-right" type="submit">
+          <i class="fas fa-check"> 저장</i>
+        </button>
+      </div>
 
+      <!-- 음식 등록 -->
+      <div class="card" v-else-if="menu==2">
+        <h1>음식 등록</h1>
+        <p class="desc"> 이미 등록된 음식은 아닌지 확인후 등록해주세요.</p>
+        <hr>
+        <br>
+        <form action="" method="post">
+          <!-- 1 -->
+          <div class="form-group">
+            <h4>1. 음식 이름</h4>
+            <input class="form-control" type="text" name="" id="" placeholder="ex) 치킨, 피자, 양식, 돈까스">
+          </div>
+        </form>
         <button class="btn btn-primary float-right" type="submit">
           <i class="fas fa-check"> 저장</i>
         </button>
@@ -59,40 +98,31 @@ import Multiselect from 'vue-multiselect'
 
 export default {
   created () {
-    this.$http.get('/api/movies')
+    this.$http.get('/api/franchise')
     .then((response) => {
-      this.movies = response.data
+      this.franchiseOptions = response.data
+    })
+    this.$http.get('/api/food')
+    .then((response) => {
+      this.foodOptions = response.data
     })
   },
   components: { Multiselect },
-  name: 'hello',
   data () {
     return {
+      // menu
+      // 0 : 동영상 등록
+      // 1 : 프랜차이즈 등록
+      // 2 : 음식 등록
+      menu: 0,
       franchiseValue: [
-        { name: '비에이치씨(BHC)', code: '비에이치씨(BHC)' }
+        // { name: '비에이치씨(BHC)', code: '비에이치씨(BHC)' }
       ],
-      franchiseOptions: [
-        { name: '비에이치씨(BHC)', code: '비에이치씨(BHC)' },
-        { name: '네네치킨', code: '네네치킨' },
-        { name: '교촌치킨', code: '교촌치킨' },
-        { name: '노랑통닭', code: '노랑통닭' },
-        { name: '비비큐치킨(BBQ치킨)', code: '비비큐치킨(BBQ치킨)' },
-        { name: '깐부치킨', code: '깐부치킨' },
-        { name: '호식이두마리치킨', code: '호식이두마리치킨' }
-      ],
+      franchiseOptions: [],
       foodValue: [
-        { name: '치킨', code: '치킨' }
+        // { name: '치킨', code: '치킨' }
       ],
-      foodOptions: [
-        { name: '치킨', code: '치킨' },
-        { name: '피자', code: '피자' },
-        { name: '야식', code: '야식' },
-        { name: '한식', code: '한식' },
-        { name: '돈까스', code: '돈까스' },
-        { name: '중국집', code: '중국집' },
-        { name: '짜장', code: '짜장' },
-        { name: '족발', code: '족발' }
-      ],
+      foodOptions: [],
       movies: []
     }
   },
@@ -149,6 +179,7 @@ export default {
 
 .card {
     margin: 5vw;
+    margin-top: 170px;
     padding: 3vw;
 }
 
@@ -169,5 +200,13 @@ export default {
 .card .form-group {
     padding-top: 30px;
     padding-bottom: 30px;
+}
+
+button {
+  margin-top: 50px;
+}
+
+.desc {
+  margin-bottom: -8px;
 }
 </style>

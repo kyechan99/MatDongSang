@@ -13,6 +13,8 @@ var index = require('./routes/index');
 var user = require('./routes/user');
 var video = require('./routes/video');
 var movies = require('./routes/movies');
+var food = require('./routes/food');
+var franchise = require('./routes/franchise');
 
 var app = express();
 var config = require('./config/config');
@@ -28,10 +30,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-// app.use('/v', video);
-// app.use('/d', develop);
-// app.use('/user', user);
+app.use('/api/v', video);
+app.use('/api/user', user);
 app.use('/api/movies', movies);
+app.use('/api/food', food);
+app.use('/api/franchise', franchise);
 app.use(require('connect-history-api-fallback')())
 
 // catch 404 and forward to error handler
@@ -52,13 +55,15 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-// function connectDB() {
-//   mongoClient.connect(config.db_url, { useNewUrlParser:true }, function(err, database) {
-//       if (err) throw err;
-//       console.log('Database Connected : ' + config.db_url);
-//       global.database = database.db('matdongsang');
-//   })
-// };
+function connectDB() {
+  mongoClient.connect(config.db_url, { useNewUrlParser:true }, function(err, database) {
+      if (err) throw err;
+      console.log('Database Connected : ' + config.db_url);
+      global.database = database.db('matdongsang');
+  })
+};
+
+connectDB();
 
 // app.listen(process.env.PORT || config.server_port, function() {
 //   console.log("Connected 8080 port");
