@@ -31,3 +31,27 @@ exports.getFranchiseList = function() {
         })
     })
 }
+
+exports.addFranchise = function(query, callback) {
+    var franchise = global.database.collection('franchise')
+    franchise.insertOne(query, function(err, result) {
+        if (err) {
+            callback(err, null)
+            return
+        }
+        callback(null, result)
+    })
+}
+
+exports.deleteFranchise = function(query, callback) {
+    var franchise = global.database.collection('franchise')
+
+    franchise.deleteOne(query, function(err, result) {
+        if (err) {
+            callback(err, null)
+            return
+        }
+
+        callback(null, result)
+    })
+}

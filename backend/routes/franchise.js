@@ -14,4 +14,29 @@ router.get('/', function(req, res) {
     }
 })
 
+router.post('/', function(req, res) {  
+    var name = req.body.name
+    var code = req.body.name
+    var query = { name:name, code:code }
+
+    if (global.database) {
+        model.addFranchise(query, function(err, result) {
+            if (err) throw err
+            res.send(result)
+        })
+    }
+})
+
+router.delete('/', function(req, res) {
+    var code = req.body.name
+    var query = { code:code }
+
+    if (global.database) {
+        model.deleteFranchise(query, function(err, result) {
+            if (err) throw err
+            res.send(result)
+        })
+    }
+})
+
 module.exports = router;

@@ -7,19 +7,19 @@
         <div class="container">
           <div class="row">
             <div class="col-md-4">
-              <a v-on:click="menu = 0">동영상 등록</a>
+              <a v-on:click="menu = 0" href="#">동영상 등록</a>
             </div>
             <div class="col-md-4">
-              <a v-on:click="menu = 1">프랜차이즈 등록</a>
+              <a v-on:click="menu = 1" href="#">프랜차이즈 등록</a>
             </div>
             <div class="col-md-4">
-              <a v-on:click="menu = 2">음식 등록</a>
+              <a v-on:click="menu = 2" href="#">음식 등록</a>
             </div>
           </div>
         </div>
       </div>
     </nav>
-    
+
     <!-- body -->
     <div class="container">
       <!-- 동영상 등록 -->
@@ -57,17 +57,16 @@
         <p class="desc"> 이미 등록된 프랜차이즈는 아닌지 확인후 등록해주세요.</p>
         <hr>
         <br>
-        <form action="" method="post">
+        <form method="post" @submit.prevent="postFranchise">
           <!-- 1 -->
           <div class="form-group">
             <h4>1. 프랜차이즈 이름</h4>
-            <input class="form-control" type="text" name="" id="" placeholder="ex) 비에이치씨(BHC)">
-            
+            <input v-model="franchiseName" class="form-control" type="text" name="name" id="name" placeholder="ex) 비에이치씨(BHC)">
           </div>
+          <button class="btn btn-primary float-right" type="submit">
+            <i class="fas fa-check"> 저장</i>
+          </button>
         </form>
-        <button class="btn btn-primary float-right" type="submit">
-          <i class="fas fa-check"> 저장</i>
-        </button>
       </div>
 
       <!-- 음식 등록 -->
@@ -76,16 +75,16 @@
         <p class="desc"> 이미 등록된 음식은 아닌지 확인후 등록해주세요.</p>
         <hr>
         <br>
-        <form action="" method="post">
+        <form method="post" @submit.prevent="postFood">
           <!-- 1 -->
           <div class="form-group">
             <h4>1. 음식 이름</h4>
-            <input class="form-control" type="text" name="" id="" placeholder="ex) 치킨, 피자, 양식, 돈까스">
+            <input v-model="foodName" class="form-control" type="text" name="name" id="name" placeholder="ex) 치킨, 피자, 양식, 돈까스">
           </div>
+          <button class="btn btn-primary float-right" type="submit">
+            <i class="fas fa-check"> 저장</i>
+          </button>
         </form>
-        <button class="btn btn-primary float-right" type="submit">
-          <i class="fas fa-check"> 저장</i>
-        </button>
       </div>
     </div>
 
@@ -123,7 +122,9 @@ export default {
         // { name: '치킨', code: '치킨' }
       ],
       foodOptions: [],
-      movies: []
+      movies: [],
+      franchiseName: '',
+      foodName: ''
     }
   },
   methods: {
@@ -142,6 +143,17 @@ export default {
       }
       this.foodOptions.push(tag)
       this.foodValue.push(tag)
+    },
+    postFranchise () {
+      this.$http.post('../api/franchise', {name: this.franchiseName})
+      .then((result) => {
+      })
+    },
+    postFood () {
+      this.$http.post('../api/food', {name: this.foodName})
+      .then((result) => {
+        console.log(result)
+      })
     }
   }
 }
